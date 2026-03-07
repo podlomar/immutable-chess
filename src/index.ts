@@ -1,4 +1,4 @@
-export { Board } from './board.js';
+export { Board, type Move } from './board.js';
 export {
   Piece,
   PieceColor,
@@ -9,4 +9,4 @@ export {
   pieceSymbol,
 } from './piece.js';
 export { ascii } from './ascii.js';
-export { Moves, type Move } from './moves.js';
+export { Moves } from './moves.js';

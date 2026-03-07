@@ -1,10 +1,5 @@
-import type { Board } from './board.js';
+import type { Board, Move } from './board.js';
 import { PieceColor, PieceKind, pieceColor, pieceKind } from './piece.js';
-
-export interface Move {
-  readonly from: number;
-  readonly to: number;
-}
 
 type Delta = readonly [number, number]; // [rank delta, file delta]
 
@@ -39,7 +34,7 @@ export class Moves {
     this.board = board;
   }
 
-  public for(from: number): Move[] {
+  public from(from: number): Move[] {
     const piece = this.board.at(from);
     if (piece === null) {
       return [];

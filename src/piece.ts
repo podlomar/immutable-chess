@@ -55,3 +55,6 @@ export const pieceSymbol = (piece: Piece): PieceSymbol => {
       throw new Error('Invalid piece value');
   }
 };
+
+export const opponentOf = (color: PieceColor): PieceColor =>
+  color === PieceColor.White ? PieceColor.Black : PieceColor.White;
