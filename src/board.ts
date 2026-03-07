@@ -59,7 +59,7 @@ export class Board {
     if (rank < 0 || rank >= this.height || file < 0 || file >= this.width) {
       throw new RangeError('Square out of bounds');
     }
-    return (7 - rank) * this.width + file;
+    return (this.height - 1 - rank) * this.width + file;
   }
 
   public inBounds(index: number): boolean {
@@ -70,7 +70,7 @@ export class Board {
     if (!this.inBounds(index)) {
       throw new RangeError('Square out of bounds');
     }
-    return 7 - Math.floor(index / this.width);
+    return this.height - 1 - Math.floor(index / this.width);
   }
 
   public file(index: number): number {
@@ -85,7 +85,7 @@ export class Board {
     for (let rank = this.height - 1; rank >= 0; rank--) {
       let emptyCount = 0;
       for (let file = 0; file < this.width; file++) {
-        const piece = this.at(rank * this.width + file);
+        const piece = this.at(this.index(rank, file));
         if (piece === null) {
           emptyCount++;
         } else {
