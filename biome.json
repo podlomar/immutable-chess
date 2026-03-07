@@ -116,6 +116,14 @@
       "lineWidth": 100
     }
   },
+  "overrides": [
+    {
+      "include": ["test/**/*.ts"],
+      "javascript": {
+        "globals": ["describe", "it", "before", "after", "beforeEach", "afterEach"]
+      }
+    }
+  ],
   "files": {
     "ignore": [
       "node_modules",
