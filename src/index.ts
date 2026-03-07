@@ -9,3 +9,4 @@ export {
   pieceSymbol,
 } from './piece.js';
 export { ascii } from './ascii.js';
+export { Moves, type Move } from './moves.js';
