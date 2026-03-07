@@ -1,6 +1,9 @@
 import { type Piece, PieceColor, pieceColor } from './piece.js';
 import { pieceSymbol } from './piece.js';
 
+const MAX_BOARD_SIZE = 26;
+const ALGEBRAIC_REGEX = /^[a-z][1-9][0-9]{0,1}$/;
+
 export class Board {
   private readonly squares: Uint8Array;
 
@@ -14,7 +17,11 @@ export class Board {
     this.height = height;
   }
 
-  public static empty(width = 8, height = 8): Board {
+  public static empty(width = 8, height: number = width): Board {
+    if (width <= 0 || width > MAX_BOARD_SIZE || height <= 0 || height > MAX_BOARD_SIZE) {
+      throw new RangeError(`Board dimensions must be between 1 and ${MAX_BOARD_SIZE}`);
+    }
+
     return new Board(width, height, new Uint8Array(width * height));
   }
 
@@ -27,14 +34,25 @@ export class Board {
     return pieceValue === 0 ? null : (pieceValue as Piece);
   }
 
-  public put(index: number, piece: Piece | null): Board {
+  public with(index: number, piece: Piece | null): Board {
     const newSquares = this.squares.slice();
     newSquares[index] = piece === null ? 0 : piece;
     return new Board(this.width, this.height, newSquares);
   }
 
-  public inBounds(index: number): boolean {
-    return index >= 0 && index < this.squares.length;
+  public withSquare(algebraic: string, piece: Piece | null): Board {
+    const index = this.fromAlgebraic(algebraic);
+    return this.with(index, piece);
+  }
+
+  public fromAlgebraic(algebraic: string): number {
+    if (!ALGEBRAIC_REGEX.test(algebraic)) {
+      throw new Error('Invalid algebraic notation');
+    }
+
+    const file = algebraic.charCodeAt(0) - 'a'.charCodeAt(0);
+    const rank = Number.parseInt(algebraic.slice(1)) - 1;
+    return this.index(rank, file);
   }
 
   public index(rank: number, file: number): number {
@@ -42,6 +60,10 @@ export class Board {
       throw new RangeError('Square out of bounds');
     }
     return (7 - rank) * this.width + file;
+  }
+
+  public inBounds(index: number): boolean {
+    return index >= 0 && index < this.squares.length;
   }
 
   public rank(index: number): number {

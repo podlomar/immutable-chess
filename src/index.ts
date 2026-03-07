@@ -3,8 +3,9 @@ export {
   Piece,
   PieceColor,
   PieceKind,
-  PieceSymbol,
+  type PieceSymbol,
   pieceColor,
   pieceKind,
   pieceSymbol,
 } from './piece.js';
+export { ascii } from './ascii.js';
