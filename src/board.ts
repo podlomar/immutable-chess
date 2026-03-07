@@ -4,6 +4,11 @@ import { pieceSymbol } from './piece.js';
 const MAX_BOARD_SIZE = 26;
 const ALGEBRAIC_REGEX = /^[a-z][1-9][0-9]{0,1}$/;
 
+export interface Square {
+  readonly index: number;
+  readonly piece: Piece | null;
+}
+
 export class Board {
   private readonly squares: Uint8Array;
 
@@ -78,6 +83,21 @@ export class Board {
       throw new RangeError('Square out of bounds');
     }
     return index % this.width;
+  }
+
+  public pieces(fn: (piece: Piece) => boolean): Square[] {
+    const pieces: Square[] = [];
+    for (let index = 0; index < this.squares.length; index++) {
+      const piece = this.at(index);
+      if (piece !== null && fn(piece)) {
+        pieces.push({ index, piece });
+      }
+    }
+    return pieces;
+  }
+
+  public piecesOfColor(color: PieceColor): Square[] {
+    return this.pieces((piece) => pieceColor(piece) === color);
   }
 
   public toFen(): string {
