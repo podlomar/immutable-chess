@@ -35,6 +35,11 @@ export class Moves {
     this.board = board;
   }
 
+  private canStepOn(index: number, color: PieceColor): boolean {
+    const occupant = this.board.at(index);
+    return occupant === null || pieceColor(occupant) !== color;
+  }
+
   public from(from: number): Move[] {
     const piece = this.board.at(from);
     if (piece === null) {
@@ -66,14 +71,12 @@ export class Moves {
       let f = file + df;
       while (r >= 0 && r < this.board.height && f >= 0 && f < this.board.width) {
         const to = this.board.index(r, f);
-        const occupant = this.board.at(to);
-        if (occupant !== null) {
-          if (pieceColor(occupant) !== color) {
-            moves.push({ from, to });
-          }
+        if (this.canStepOn(to, color)) {
+          moves.push({ from, to });
+        }
+        if (this.board.at(to) !== null) {
           break;
         }
-        moves.push({ from, to });
         r += dr;
         f += df;
       }
@@ -93,8 +96,7 @@ export class Moves {
         continue;
       }
       const to = this.board.index(r, f);
-      const occupant = this.board.at(to);
-      if (occupant === null || pieceColor(occupant) !== color) {
+      if (this.canStepOn(to, color)) {
         moves.push({ from, to });
       }
     }
@@ -125,8 +127,7 @@ export class Moves {
         const f = file + df;
         if (f >= 0 && f < this.board.width) {
           const to = this.board.index(r1, f);
-          const occupant = this.board.at(to);
-          if (occupant !== null && pieceColor(occupant) !== color) {
+          if (this.board.at(to) !== null && this.canStepOn(to, color)) {
             moves.push({ from, to });
           }
         }
