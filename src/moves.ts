@@ -1,30 +1,31 @@
 import type { Board, Move } from './board.js';
 import { PieceColor, PieceKind, pieceColor, pieceKind } from './piece.js';
 
-type Delta = readonly [number, number]; // [rank delta, file delta]
+type Delta = { readonly dr: number; readonly df: number };
 
 const STRAIGHT: readonly Delta[] = [
-  [1, 0],
-  [-1, 0],
-  [0, 1],
-  [0, -1],
+  { dr: 1, df: 0 },
+  { dr: -1, df: 0 },
+  { dr: 0, df: 1 },
+  { dr: 0, df: -1 },
 ];
+
 const DIAGONAL: readonly Delta[] = [
-  [1, 1],
-  [1, -1],
-  [-1, 1],
-  [-1, -1],
+  { dr: 1, df: 1 },
+  { dr: 1, df: -1 },
+  { dr: -1, df: 1 },
+  { dr: -1, df: -1 },
 ];
 const ALL_DIRS: readonly Delta[] = [...STRAIGHT, ...DIAGONAL];
 const KNIGHT_DELTAS: readonly Delta[] = [
-  [2, 1],
-  [2, -1],
-  [-2, 1],
-  [-2, -1],
-  [1, 2],
-  [1, -2],
-  [-1, 2],
-  [-1, -2],
+  { dr: 2, df: 1 },
+  { dr: 2, df: -1 },
+  { dr: -2, df: 1 },
+  { dr: -2, df: -1 },
+  { dr: 1, df: 2 },
+  { dr: 1, df: -2 },
+  { dr: -1, df: 2 },
+  { dr: -1, df: -2 },
 ];
 
 export class Moves {
@@ -60,7 +61,7 @@ export class Moves {
     const file = this.board.file(from);
     const moves: Move[] = [];
 
-    for (const [dr, df] of directions) {
+    for (const { dr, df } of directions) {
       let r = rank + dr;
       let f = file + df;
       while (r >= 0 && r < this.board.height && f >= 0 && f < this.board.width) {
@@ -85,7 +86,7 @@ export class Moves {
     const file = this.board.file(from);
     const moves: Move[] = [];
 
-    for (const [dr, df] of deltas) {
+    for (const { dr, df } of deltas) {
       const r = rank + dr;
       const f = file + df;
       if (r < 0 || r >= this.board.height || f < 0 || f >= this.board.width) {
