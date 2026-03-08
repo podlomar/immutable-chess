@@ -30,10 +30,12 @@ const KNIGHT_DELTAS: readonly Delta[] = [
 
 export interface Rules {
   pawnDoubleAdvance: boolean;
+  turnColor: PieceColor;
 }
 
 const DEFAULT_RULES: Rules = {
   pawnDoubleAdvance: true,
+  turnColor: PieceColor.White,
 };
 
 export class Moves {
@@ -53,6 +55,9 @@ export class Moves {
   public from(from: number): Move[] {
     const piece = this.board.at(from);
     if (piece === null) {
+      return [];
+    }
+    if (pieceColor(piece) !== this.rules.turnColor) {
       return [];
     }
     switch (pieceKind(piece)) {
