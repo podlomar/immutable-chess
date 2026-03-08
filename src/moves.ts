@@ -28,11 +28,21 @@ const KNIGHT_DELTAS: readonly Delta[] = [
   { dr: -1, df: -2 },
 ];
 
+export interface Rules {
+  pawnDoubleAdvance: boolean;
+}
+
+const DEFAULT_RULES: Rules = {
+  pawnDoubleAdvance: true,
+};
+
 export class Moves {
   private readonly board: Board;
+  private readonly rules: Rules;
 
-  public constructor(board: Board) {
+  public constructor(board: Board, rules: Partial<Rules> = {}) {
     this.board = board;
+    this.rules = { ...DEFAULT_RULES, ...rules };
   }
 
   private canStepOn(index: number, color: PieceColor): boolean {
@@ -116,7 +126,7 @@ export class Moves {
       if (this.board.at(to1) === null) {
         moves.push({ from, to: to1 });
         const r2 = rank + 2 * dr;
-        if (rank === startRank && r2 >= 0 && r2 < this.board.height) {
+        if (this.rules.pawnDoubleAdvance && rank === startRank && r2 >= 0 && r2 < this.board.height) {
           const to2 = this.board.index(r2, file);
           if (this.board.at(to2) === null) {
             moves.push({ from, to: to2 });
