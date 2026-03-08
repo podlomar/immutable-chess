@@ -153,19 +153,19 @@ describe('Board.toSquare()', () => {
 });
 
 describe('Board.squareColor()', () => {
-  it('a1 is a light square', () => {
+  it('a1 is a dark square', () => {
     const board = Board.empty();
-    expect(board.squareColor(board.fromSquare('a1'))).to.equal('light');
+    expect(board.squareColor(board.fromSquare('a1'))).to.equal('dark');
   });
 
-  it('b1 is a dark square', () => {
+  it('b1 is a light square', () => {
     const board = Board.empty();
-    expect(board.squareColor(board.fromSquare('b1'))).to.equal('dark');
+    expect(board.squareColor(board.fromSquare('b1'))).to.equal('light');
   });
 
-  it('h8 is a light square', () => {
+  it('h8 is a dark square', () => {
     const board = Board.empty();
-    expect(board.squareColor(board.fromSquare('h8'))).to.equal('light');
+    expect(board.squareColor(board.fromSquare('h8'))).to.equal('dark');
   });
 
   it('throws RangeError for out-of-bounds index', () => {
@@ -307,6 +307,25 @@ describe('Board.move()', () => {
     const from = board.fromSquare('e2');
     const to = board.fromSquare('e4');
     expect(() => board.move({ from, to })).to.throw(Error);
+  });
+});
+
+describe('Board.emptySquares()', () => {
+  it('returns all squares for an empty board', () => {
+    const board = Board.empty();
+    expect(board.emptySquares()).to.have.length(64);
+  });
+
+  it('returns 63 squares after placing one piece', () => {
+    const board = Board.empty().place(0, Piece.WhitePawn);
+    expect(board.emptySquares()).to.have.length(63);
+  });
+
+  it('does not include occupied square indices', () => {
+    const board = Board.empty();
+    const idx = board.fromSquare('e4');
+    const updated = board.place(idx, Piece.WhiteKnight);
+    expect(updated.emptySquares()).to.not.include(idx);
   });
 });
 

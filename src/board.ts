@@ -87,7 +87,7 @@ export class Board {
 
     const rank = this.rank(index);
     const file = this.file(index);
-    return (rank + file) % 2 === 0 ? 'light' : 'dark';
+    return (rank + file) % 2 === 0 ? 'dark' : 'light';
   }
 
   public fromSquare(square: string): number {
@@ -151,6 +151,16 @@ export class Board {
 
   public piecesOfColor(color: PieceColor): number[] {
     return this.findPieces((piece) => pieceColor(piece) === color);
+  }
+
+  public emptySquares(): number[] {
+    const result: number[] = [];
+    for (let i = 0; i < this.squares.length; i++) {
+      if (this.squares[i] === 0) {
+        result.push(i);
+      }
+    }
+    return result;
   }
 
   public toFen(): string {
