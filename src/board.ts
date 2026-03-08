@@ -17,7 +17,6 @@ export class Board {
 
   public readonly width: number;
   public readonly height: number;
-  public readonly turnColor: PieceColor = PieceColor.White;
 
   private constructor(width: number, height: number, squares: Uint8Array) {
     this.squares = squares;
