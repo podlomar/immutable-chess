@@ -1,7 +1,6 @@
 export type PieceSymbol = 'p' | 'n' | 'b' | 'r' | 'q' | 'k';
 
-// biome-ignore lint/suspicious/noConstEnum: <explanation>
-export const enum Piece {
+export enum Piece {
   WhitePawn = 0b0011,
   BlackPawn = 0b0010,
   WhiteKnight = 0b0101,
@@ -26,8 +25,7 @@ export const enum PieceKind {
   King = 0b110,
 }
 
-// biome-ignore lint/suspicious/noConstEnum: <explanation>
-export const enum PieceColor {
+export enum PieceColor {
   Black = 0,
   White = 1,
 }
