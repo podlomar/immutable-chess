@@ -1,4 +1,4 @@
-export { Board, type Move } from './board.js';
+export { Board, type Move, type SquareColor } from './board.js';
 export {
   Piece,
   PieceColor,
