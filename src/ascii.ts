@@ -14,9 +14,10 @@ export const ascii = (board: Board, flip = false): string => {
     return `${rankNumber.toString().padStart(rankLabelWidth)} ${row.join('')}`;
   });
 
-  const fileLetters = Array.from({ length: board.width }, (_, f) =>
-    String.fromCharCode(FILE_A + f),
-  ).join('');
+  const fileLetters = Array.from({ length: board.width }, (_, f) => {
+    const file = flip ? board.width - 1 - f : f;
+    return String.fromCharCode(FILE_A + file);
+  }).join('');
 
   return `${rankLines.join('\n')}\n${indent}${fileLetters}\n`;
 };

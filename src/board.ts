@@ -235,7 +235,7 @@ export class Board {
     for (let r = 0; r < this.height; r++) {
       const row: T[] = [];
       for (let f = 0; f < this.width; f++) {
-        const index = this.index(flip ? r : this.height - 1 - r, f);
+        const index = this.index(flip ? r : this.height - 1 - r, flip ? this.width - 1 - f : f);
         const piece = this.squares[index] === 0 ? null : (this.squares[index] as Piece);
         row.push(fn(piece, index));
       }

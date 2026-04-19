@@ -27,9 +27,9 @@ describe('ascii()', () => {
     expect(lines[lines.length - 1]).to.equal('  abcdefgh');
   });
 
-  it('renders file labels a–h at the bottom when flipped', () => {
+  it('renders file labels h–a at the bottom when flipped', () => {
     const lines = ascii(Board.empty(), true).trimEnd().split('\n');
-    expect(lines[lines.length - 1]).to.equal('  abcdefgh');
+    expect(lines[lines.length - 1]).to.equal('  hgfedcba');
   });
 
   it('renders empty squares as dots', () => {
@@ -73,13 +73,16 @@ describe('ascii()', () => {
     expect(lines[7]).to.equal('1 RNBQKBNR');
   });
 
-  it('flip mirrors the rank order', () => {
+  it('flip shows the board from the opposite corner (h1 top-left)', () => {
     const board = Board.fromFen('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR');
     const lines = ascii(board, true).trimEnd().split('\n');
-    expect(lines[0]).to.equal('1 RNBQKBNR');
+    // Rank 1 at top, reading h→a: h1=R n1=N f1=B e1=K d1=Q c1=B b1=N a1=R
+    expect(lines[0]).to.equal('1 RNBKQBNR');
     expect(lines[1]).to.equal('2 PPPPPPPP');
     expect(lines[6]).to.equal('7 pppppppp');
-    expect(lines[7]).to.equal('8 rnbqkbnr');
+    // Rank 8 at bottom, reading h→a: h8=r g8=n f8=b e8=k d8=q c8=b b8=n a8=r
+    expect(lines[7]).to.equal('8 rnbkqbnr');
+    expect(lines[8]).to.equal('  hgfedcba');
   });
 
   it('uses 2-digit rank labels for boards with 10+ ranks', () => {
