@@ -1,5 +1,4 @@
-import { type Piece, PieceColor, pieceColor } from './piece.js';
-import { pieceSymbol } from './piece.js';
+import { Piece, PieceColor, pieceColor, pieceSymbol } from './piece.js';
 
 const MAX_BOARD_SIZE = 26; // Limited by the algebraic notation (a-z for files)
 
@@ -12,6 +11,15 @@ export type SquareColor = 'light' | 'dark';
 
 const FILE_A = 'a'.charCodeAt(0);
 
+const FEN_TO_PIECE: Record<string, Piece> = {
+  P: Piece.WhitePawn,   p: Piece.BlackPawn,
+  N: Piece.WhiteKnight, n: Piece.BlackKnight,
+  B: Piece.WhiteBishop, b: Piece.BlackBishop,
+  R: Piece.WhiteRook,   r: Piece.BlackRook,
+  Q: Piece.WhiteQueen,  q: Piece.BlackQueen,
+  K: Piece.WhiteKing,   k: Piece.BlackKing,
+};
+
 export class Board {
   private readonly squares: Uint8Array;
 
@@ -22,6 +30,60 @@ export class Board {
     this.squares = squares;
     this.width = width;
     this.height = height;
+  }
+
+  public static fromFen(fen: string): Board {
+    const placement = fen.split(' ')[0];
+    const rankStrings = placement.split('/');
+    const height = rankStrings.length;
+
+    if (height < 1 || height > MAX_BOARD_SIZE) {
+      throw new RangeError(`FEN has ${height} ranks; must be between 1 and ${MAX_BOARD_SIZE}`);
+    }
+
+    let width = 0;
+    const allSquares: number[] = [];
+
+    for (let r = 0; r < height; r++) {
+      const rankSquares: number[] = [];
+      let i = 0;
+      const rankStr = rankStrings[r];
+
+      while (i < rankStr.length) {
+        const char = rankStr[i];
+        if (char >= '1' && char <= '9') {
+          let numStr = char;
+          while (i + 1 < rankStr.length && rankStr[i + 1] >= '0' && rankStr[i + 1] <= '9') {
+            i++;
+            numStr += rankStr[i];
+          }
+          const count = Number.parseInt(numStr, 10);
+          for (let j = 0; j < count; j++) rankSquares.push(0);
+        } else {
+          const piece = FEN_TO_PIECE[char];
+          if (piece === undefined) {
+            throw new Error(`Invalid FEN piece character: '${char}'`);
+          }
+          rankSquares.push(piece);
+        }
+        i++;
+      }
+
+      if (r === 0) {
+        width = rankSquares.length;
+        if (width < 1 || width > MAX_BOARD_SIZE) {
+          throw new RangeError(`FEN rank width ${width} must be between 1 and ${MAX_BOARD_SIZE}`);
+        }
+      } else if (rankSquares.length !== width) {
+        throw new Error(
+          `FEN rank ${height - r} has ${rankSquares.length} squares but expected ${width}`,
+        );
+      }
+
+      allSquares.push(...rankSquares);
+    }
+
+    return new Board(width, height, new Uint8Array(allSquares));
   }
 
   public static empty(width = 8, height: number = width): Board {

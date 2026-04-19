@@ -371,3 +371,66 @@ describe('Board.toFen()', () => {
     expect(board.toFen()).to.equal('3/3/K2');
   });
 });
+
+describe('Board.fromFen()', () => {
+  it('parses an empty 8x8 board', () => {
+    const board = Board.fromFen('8/8/8/8/8/8/8/8');
+    expect(board.width).to.equal(8);
+    expect(board.height).to.equal(8);
+    for (let i = 0; i < 64; i++) {
+      expect(board.at(i)).to.be.null;
+    }
+  });
+
+  it('roundtrips with toFen for a single piece', () => {
+    const fen = '8/8/8/8/3B4/8/8/8';
+    expect(Board.fromFen(fen).toFen()).to.equal(fen);
+  });
+
+  it('roundtrips with toFen for all piece types', () => {
+    const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR';
+    expect(Board.fromFen(fen).toFen()).to.equal(fen);
+  });
+
+  it('places pieces on the correct squares', () => {
+    const board = Board.fromFen('8/8/8/8/8/8/8/7Q');
+    expect(board.atSquare('h1')).to.equal(Piece.WhiteQueen);
+    expect(board.atSquare('a1')).to.be.null;
+  });
+
+  it('places a black rook on a8 correctly', () => {
+    const board = Board.fromFen('r7/8/8/8/8/8/8/8');
+    expect(board.atSquare('a8')).to.equal(Piece.BlackRook);
+    expect(board.atSquare('b8')).to.be.null;
+  });
+
+  it('accepts a full FEN string and uses only the piece placement', () => {
+    const board = Board.fromFen('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e3 0 1');
+    expect(board.atSquare('e4')).to.equal(Piece.WhitePawn);
+    expect(board.atSquare('e2')).to.be.null;
+  });
+
+  it('parses a non-8x8 board', () => {
+    const board = Board.fromFen('3/3/K2');
+    expect(board.width).to.equal(3);
+    expect(board.height).to.equal(3);
+    expect(board.atSquare('a1')).to.equal(Piece.WhiteKing);
+  });
+
+  it('handles multi-digit empty square counts', () => {
+    const board = Board.fromFen('26/26');
+    expect(board.width).to.equal(26);
+    expect(board.height).to.equal(2);
+    for (let i = 0; i < 52; i++) {
+      expect(board.at(i)).to.be.null;
+    }
+  });
+
+  it('throws for an invalid piece character', () => {
+    expect(() => Board.fromFen('8/8/8/8/8/8/8/7X')).to.throw(Error);
+  });
+
+  it('throws for inconsistent rank widths', () => {
+    expect(() => Board.fromFen('8/8/8/8/8/8/8/6')).to.throw(Error);
+  });
+});
