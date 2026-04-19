@@ -16,6 +16,36 @@
         "types": "./dist/index.d.cts",
         "default": "./dist/index.cjs"
       }
+    },
+    "./moves": {
+      "import": {
+        "types": "./dist/moves.d.ts",
+        "default": "./dist/moves.js"
+      },
+      "require": {
+        "types": "./dist/moves.d.cts",
+        "default": "./dist/moves.cjs"
+      }
+    },
+    "./rules": {
+      "import": {
+        "types": "./dist/rules.d.ts",
+        "default": "./dist/rules.js"
+      },
+      "require": {
+        "types": "./dist/rules.d.cts",
+        "default": "./dist/rules.cjs"
+      }
+    },
+    "./ascii": {
+      "import": {
+        "types": "./dist/ascii.d.ts",
+        "default": "./dist/ascii.js"
+      },
+      "require": {
+        "types": "./dist/ascii.d.cts",
+        "default": "./dist/ascii.cjs"
+      }
     }
   },
   "files": ["dist"],

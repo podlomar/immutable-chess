@@ -1,5 +1,6 @@
 import { expect } from 'chai';
-import { Board, Piece, PieceColor, isLegal } from '../src/index.js';
+import { Board, Piece, PieceColor } from '../src/index.js';
+import { isLegal } from '../src/rules.js';
 
 // Helpers for building boards concisely
 const empty = Board.empty();
@@ -161,8 +162,6 @@ describe('isLegal — turnColor / opponentInCheck', () => {
 
   it('is illegal when the opponent (black) king is in check', () => {
     // White rook on e1, black king on e8 — same file, rook gives check
-    const board = withPieces(['e1', Piece.WhiteRook], ['e1', Piece.WhiteKing]);
-    // Put white rook on e1 and black king on e8
     const b = withPieces(['a1', Piece.WhiteKing], ['e1', Piece.WhiteRook], ['e8', Piece.BlackKing]);
     const result = isLegal(b, { turnColor: PieceColor.White });
     expect(result.legal).to.be.false;
