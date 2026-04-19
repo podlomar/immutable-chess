@@ -1,6 +1,6 @@
 {
   "name": "immutable-chess",
-  "version": "0.1.0-beta.0",
+  "version": "0.1.0-beta.1",
   "description": "A TypeScript library for chess position representation and manipulation.",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -48,7 +48,9 @@
       }
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
@@ -58,7 +60,11 @@
     "lint:fix": "biome check --write .",
     "format": "biome format --write ."
   },
-  "keywords": ["typescript", "library", "chessboard"],
+  "keywords": [
+    "typescript",
+    "library",
+    "chessboard"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
