@@ -8,4 +8,5 @@ export {
   pieceColor,
   pieceKind,
   pieceSymbol,
+  pieceLetter,
 } from './piece.js';
