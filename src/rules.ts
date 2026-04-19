@@ -29,6 +29,7 @@ export type Violation =
   | { type: 'missingKing'; color: PieceColor }
   | { type: 'extraKing'; color: PieceColor; count: number }
   | { type: 'pawnOnBackRank'; index: number }
+  | { type: 'kingsAdjacent' }
   | { type: 'opponentInCheck' };
 
 export interface LegalityResult {
@@ -56,6 +57,21 @@ export function isLegal(board: Board, options?: Partial<LegalityOptions>): Legal
     }
     if (kingSquares.length > 1) {
       violations.push({ type: 'extraKing', color, count: kingSquares.length });
+    }
+  }
+
+  // Adjacent kings check
+  const whiteKing = board.findPiece(
+    (p) => pieceColor(p) === PieceColor.White && pieceKind(p) === PieceKind.King,
+  );
+  const blackKing = board.findPiece(
+    (p) => pieceColor(p) === PieceColor.Black && pieceKind(p) === PieceKind.King,
+  );
+  if (whiteKing !== null && blackKing !== null) {
+    const rankDiff = Math.abs(board.rank(whiteKing) - board.rank(blackKing));
+    const fileDiff = Math.abs(board.file(whiteKing) - board.file(blackKing));
+    if (rankDiff <= 1 && fileDiff <= 1) {
+      violations.push({ type: 'kingsAdjacent' });
     }
   }
 

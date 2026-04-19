@@ -198,6 +198,42 @@ describe('isLegal — turnColor / opponentInCheck', () => {
   });
 });
 
+// ── Adjacent kings check ──────────────────────────────────────────────────────
+
+describe('isLegal — kingsAdjacent', () => {
+  it('is legal when kings are 2 files apart', () => {
+    const board = withPieces(['e1', Piece.WhiteKing], ['g1', Piece.BlackKing]);
+    expect(isLegal(board).legal).to.be.true;
+  });
+
+  it('is illegal when kings are on adjacent squares (same rank, 1 file apart)', () => {
+    const board = withPieces(['e1', Piece.WhiteKing], ['f1', Piece.BlackKing]);
+    const result = isLegal(board);
+    expect(result.legal).to.be.false;
+    expect(result.violations).to.deep.include({ type: 'kingsAdjacent' });
+  });
+
+  it('is illegal when kings are diagonally adjacent', () => {
+    const board = withPieces(['e1', Piece.WhiteKing], ['f2', Piece.BlackKing]);
+    const result = isLegal(board);
+    expect(result.legal).to.be.false;
+    expect(result.violations).to.deep.include({ type: 'kingsAdjacent' });
+  });
+
+  it('is illegal when kings are on the same file 1 rank apart', () => {
+    const board = withPieces(['e1', Piece.WhiteKing], ['e2', Piece.BlackKing]);
+    const result = isLegal(board);
+    expect(result.legal).to.be.false;
+    expect(result.violations).to.deep.include({ type: 'kingsAdjacent' });
+  });
+
+  it('does not fire when one king is missing', () => {
+    const board = withPieces(['e1', Piece.WhiteKing]);
+    const result = isLegal(board, { kings: 'optional' });
+    expect(result.violations.find((v) => v.type === 'kingsAdjacent')).to.not.exist;
+  });
+});
+
 // ── Multiple simultaneous violations ─────────────────────────────────────────
 
 describe('isLegal — multiple violations at once', () => {
