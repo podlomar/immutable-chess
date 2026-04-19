@@ -65,6 +65,33 @@ board.emptySquares()                                     // → number[]
 board.squareColor(index)      // → 'light' | 'dark'  (SquareColor)
 ```
 
+## Mapping over squares
+
+`map` traverses every square in visual order and applies a function, returning a 2D array `result[row][col]` ready for rendering.
+
+```typescript
+board.map<T>(fn: (piece: Piece | null, index: number) => T, flip?: boolean): T[][]
+```
+
+- `flip = false` (default): rank `height−1` at the top, file 0 on the left — white's perspective.
+- `flip = true`: rank 0 at the top, file `width−1` on the left — black's perspective.
+
+`Board` assigns no chess meaning to `flip`; the view layer decides what each orientation represents.
+
+```typescript
+// Collect piece symbols as a 2D grid from black's side
+const grid = board.map((piece, _idx) => piece ? pieceSymbol(piece) : '.', true);
+// grid[0][0] = square visually top-left from black's perspective (h1)
+```
+
+The `ascii()` renderer uses `board.map` internally and accepts the same `flip` parameter:
+
+```typescript
+import { ascii } from 'immutable-chess/ascii';
+console.log(ascii(board));        // white's perspective
+console.log(ascii(board, true));  // black's perspective
+```
+
 ## Placing and removing pieces
 
 All placement methods return a **new** `Board`.

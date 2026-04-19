@@ -252,19 +252,21 @@ Setting `turnColor` enables check detection: `isLegal(board, { turnColor: PieceC
 ```typescript
 import { ascii } from 'immutable-chess/ascii';
 
-console.log(ascii(board));
-// 8 rnbqkbnr
-// 7 pppppppp
-// 6 ........
-// 5 ........
-// 4 ........
-// 3 ........
-// 2 PPPPPPPP
-// 1 RNBQKBNR
-//   abcdefgh
+console.log(ascii(board));         // white's perspective (default)
+console.log(ascii(board, true));   // black's perspective (flip=true)
 ```
 
-White pieces are uppercase, black pieces lowercase, empty squares are `.`.
+`flip = true` puts rank 1 at the top and reverses the file order (h on the left). White pieces are uppercase, black pieces lowercase, empty squares are `.`.
+
+## Board.map
+
+`map` is the general primitive for view rendering. It traverses every square in visual order and returns a 2D array `result[row][col]`:
+
+```typescript
+board.map<T>(fn: (piece: Piece | null, index: number) => T, flip?: boolean): T[][]
+```
+
+`Board` does not assign chess meaning to `flip` — the view layer decides what each orientation represents. `ascii` uses `board.map` internally.
 
 ## Variant boards
 
