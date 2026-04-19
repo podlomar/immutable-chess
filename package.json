@@ -48,9 +48,7 @@
       }
     }
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
@@ -58,13 +56,10 @@
     "test": "mocha",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
-    "format": "biome format --write ."
+    "format": "biome format --write .",
+    "prepublishOnly": "npm run build"
   },
-  "keywords": [
-    "typescript",
-    "library",
-    "chessboard"
-  ],
+  "keywords": ["typescript", "library", "chessboard"],
   "author": "",
   "license": "MIT",
   "devDependencies": {
