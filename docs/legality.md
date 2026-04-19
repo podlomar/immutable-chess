@@ -27,7 +27,7 @@ interface LegalityOptions {
 | Value | Meaning |
 |-------|---------|
 | `'required'` | Each color must have **exactly one** king. Generates `missingKing` if absent, `extraKing` if more than one. |
-| `'optional'` | Each color may have 0 or 1 king. Only generates `extraKing` if more than one. |
+| `'optional'` | Each color may have 0 or 1 king. `missingKing` is never generated; `extraKing` still fires if more than one is present. |
 
 ### `pawnsOnBackRank`
 
@@ -60,6 +60,7 @@ type Violation =
   | { type: 'missingKing';      color: PieceColor }
   | { type: 'extraKing';        color: PieceColor; count: number }
   | { type: 'pawnOnBackRank';   index: number }
+  | { type: 'kingsAdjacent' }
   | { type: 'opponentInCheck' }
 ```
 
@@ -85,6 +86,14 @@ Generated when `pawnsOnBackRank: 'forbidden'` and a pawn sits on rank 0 or rank 
 
 ```typescript
 { type: 'pawnOnBackRank', index: 4 }
+```
+
+### kingsAdjacent
+
+Generated when both kings are present and their squares are within one step of each other (Chebyshev distance ≤ 1). This check is always active regardless of the `kings` option — it only fires when both kings are found on the board.
+
+```typescript
+{ type: 'kingsAdjacent' }
 ```
 
 ### opponentInCheck
@@ -135,6 +144,9 @@ for (const v of violations) {
       break;
     case 'pawnOnBackRank':
       console.log(`Pawn on back rank at index ${v.index} (${board.toSquare(v.index)})`);
+      break;
+    case 'kingsAdjacent':
+      console.log('Kings are adjacent');
       break;
     case 'opponentInCheck':
       console.log('Opponent king is in check');

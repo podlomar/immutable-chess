@@ -237,9 +237,10 @@ When `legal` is `false`, `violations` contains one or more of:
 
 | Violation type | Meaning |
 |----------------|---------|
-| `{ type: 'missingKing', color }` | A color has no king (`kings: 'required'`) |
-| `{ type: 'extraKing', color, count }` | A color has more than one king |
+| `{ type: 'missingKing', color }` | A color has no king — only when `kings: 'required'` |
+| `{ type: 'extraKing', color, count }` | A color has more than one king — always checked (both options allow at most one) |
 | `{ type: 'pawnOnBackRank', index }` | A pawn sits on rank 0 or rank `height−1` |
+| `{ type: 'kingsAdjacent' }` | Both kings are within one square of each other |
 | `{ type: 'opponentInCheck' }` | Opponent's king is under attack (`turnColor` was set) |
 
 All violations are collected — the check is never short-circuited.
