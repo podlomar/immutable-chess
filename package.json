@@ -1,6 +1,6 @@
 {
   "name": "immutable-chess",
-  "version": "0.1.0-beta.2",
+  "version": "0.1.0-beta.3",
   "description": "A TypeScript library for chess position representation and manipulation.",
   "type": "module",
   "main": "./dist/index.cjs",
