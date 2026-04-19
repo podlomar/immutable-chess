@@ -12,12 +12,18 @@ export type SquareColor = 'light' | 'dark';
 const FILE_A = 'a'.charCodeAt(0);
 
 const FEN_TO_PIECE: Record<string, Piece> = {
-  P: Piece.WhitePawn,   p: Piece.BlackPawn,
-  N: Piece.WhiteKnight, n: Piece.BlackKnight,
-  B: Piece.WhiteBishop, b: Piece.BlackBishop,
-  R: Piece.WhiteRook,   r: Piece.BlackRook,
-  Q: Piece.WhiteQueen,  q: Piece.BlackQueen,
-  K: Piece.WhiteKing,   k: Piece.BlackKing,
+  P: Piece.WhitePawn,
+  p: Piece.BlackPawn,
+  N: Piece.WhiteKnight,
+  n: Piece.BlackKnight,
+  B: Piece.WhiteBishop,
+  b: Piece.BlackBishop,
+  R: Piece.WhiteRook,
+  r: Piece.BlackRook,
+  Q: Piece.WhiteQueen,
+  q: Piece.BlackQueen,
+  K: Piece.WhiteKing,
+  k: Piece.BlackKing,
 };
 
 export class Board {
@@ -220,6 +226,20 @@ export class Board {
       if (this.squares[i] === 0) {
         result.push(i);
       }
+    }
+    return result;
+  }
+
+  public map<T>(fn: (pieces: Piece | null, index: number) => T, flip = false): T[][] {
+    const result: T[][] = [];
+    for (let r = 0; r < this.height; r++) {
+      const row: T[] = [];
+      for (let f = 0; f < this.width; f++) {
+        const index = this.index(flip ? r : this.height - 1 - r, f);
+        const piece = this.squares[index] === 0 ? null : (this.squares[index] as Piece);
+        row.push(fn(piece, index));
+      }
+      result.push(row);
     }
     return result;
   }
