@@ -34,6 +34,11 @@ export const pieceKind = (piece: Piece): PieceKind => (piece >> 1) as PieceKind;
 
 export const pieceColor = (piece: Piece): PieceColor => (piece & 0b1) as PieceColor;
 
+export const pieceLetter = (piece: Piece): string => {
+  const symbol = pieceSymbol(piece);
+  return pieceColor(piece) === PieceColor.White ? symbol.toUpperCase() : symbol;
+};
+
 export const pieceSymbol = (piece: Piece): PieceSymbol => {
   const kind = pieceKind(piece);
   switch (kind) {
